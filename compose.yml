@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16
+    container_name: gamebuy_db
+    environment:
+      POSTGRES_USER: gamebuy
+      POSTGRES_PASSWORD: gamebuy
+      POSTGRES_DB: gamebuy
+    ports:
+      - "5433:5432"
+    volumes:
+      - gamebuy_pgdata:/var/lib/postgresql/data
+  
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamebuy_api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://gamebuy:gamebuy@db:5432/gamebuy?schema=public
+      JWT_ACCESS_SECRET: supersecret
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_SECRET: superrefresh
+      JWT_REFRESH_EXPIRES_IN: 7d
+    depends_on:
+      - db
+    restart: unless-stopped
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: gamebuy_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gamebuy.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  gamebuy_pgdata:
