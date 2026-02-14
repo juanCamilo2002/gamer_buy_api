@@ -32,7 +32,7 @@ services:
     image: dpage/pgadmin4
     container_name: gamebuy_pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@gamebuy.local
+      PGADMIN_DEFAULT_EMAIL: admin@gamebuy.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"

@@ -25,11 +25,33 @@ model User {
   password  String
   role      UserRole @default(CUSTOMER)
 
+  refreshTokens RefreshToken[]
+
   cart      Cart?
   orders    Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+
+  tokenHash String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  device    String?  
+  ip        String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  updatedAt DateTime @updatedAt
+
+  revoked   Boolean  @default(false)   
+
+  @@index([userId])
 }
 
 model Category {
