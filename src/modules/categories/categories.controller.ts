@@ -1,0 +1,44 @@
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Categories')
+@ApiBearerAuth()
+@Controller('categories')
+export class CategoriesController {
+  constructor(private readonly categoriesService: CategoriesService) { }
+
+  @Public()
+  @Get()
+  findAll() {
+    return this.categoriesService.findAll();
+  }
+
+  @Public()
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.categoriesService.findBySlug(slug);
+  }
+
+  @Roles('ADMIN')
+  @Post()
+  create(@Body() dto: CreateCategoryDto) {
+    return this.categoriesService.create(dto)
+  }
+
+  @Roles('ADMIN')
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto  ) {
+    return this.categoriesService.update(id, dto)
+  }
+
+  @Roles('ADMIN')
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.categoriesService.remove(id)
+  }
+}
