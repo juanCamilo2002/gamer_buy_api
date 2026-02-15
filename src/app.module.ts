@@ -9,6 +9,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { CartModule } from './modules/cart/cart.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { CartModule } from './modules/cart/cart.module';
      AuthModule,
      ProductsModule,
      CategoriesModule,
-     CartModule
+     CartModule,
+     OrdersModule
   ],
   controllers: [],
   providers: [
